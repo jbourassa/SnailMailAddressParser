@@ -97,3 +97,18 @@ addresses:
     po_box: P.O. Box 13005
     care_of:
 
+- given: |
+    101 Ontario
+    Montreal, Québec G1T 1T1
+  expect:
+    municipality: Montreal
+    province: Québec
+    postal: G1T 1T1
+    country: Canada
+    street_number: 101
+    street_name: Ontario
+    additional_address_info:
+    po_box:
+    addressee:
+    suite:
+    care_of:

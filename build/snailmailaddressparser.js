@@ -23,12 +23,12 @@
 /*  ---- Begin AMD content ---- */
 VERSION = "0.1.27";
 // -- from: lib/Debug.coffee -- \\
-/*
-#
-# Some debugging utilities
-#
-*/
 
+/*
+ *
+ * Some debugging utilities
+ *
+ */
 var inspect, log;
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -55,12 +55,12 @@ if (typeof module !== 'undefined' && module.exports) {
 
 
 // -- from: lib/iso3166.coffee -- \\
+
 /*
  * ISO 3166 country codes
  *
  * See eg https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes
-*/
-
+ */
 var ALL_COUNTRY_IDS, COUNTRIES_REX, COUNTRY_NAMES_MAP, iso3166;
 
 iso3166 = [
@@ -834,7 +834,7 @@ COUNTRIES_REX = XRegExp("(" + (_.keys(iso3166).join("|")) + ")");
 
 // -- from: lib/LineMatcherStrategy.coffee -- \\
 var LineMatcherStrategy,
-  __slice = [].slice;
+  slice = [].slice;
 
 LineMatcherStrategy = (function() {
   function LineMatcherStrategy() {
@@ -843,7 +843,7 @@ LineMatcherStrategy = (function() {
 
   LineMatcherStrategy.prototype.add = function() {
     var line_matcher_list, permutations;
-    line_matcher_list = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    line_matcher_list = 1 <= arguments.length ? slice.call(arguments, 0) : [];
     permutations = [_.toArray(line_matcher_list)];
     _.each(line_matcher_list, function(lm, index) {
       var perms_wo_lm;
@@ -873,7 +873,7 @@ LineMatcherStrategy = (function() {
 
 // -- from: lib/LineMatcher.coffee -- \\
 var LineMatcher,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 LineMatcher = (function() {
   function LineMatcher(name, expression, options) {
@@ -889,12 +889,12 @@ LineMatcher = (function() {
       valid_tests: [],
       _or: null
     });
-    this.rex = XRegExp("^" + expression + "$", this.options.rex_flags);
+    this.rex = XRegExp("^" + this.expression + "$", this.options.rex_flags);
   }
 
   LineMatcher.prototype.names = function() {
     if (this.options._or) {
-      return "" + this.name + " or " + (this.options._or.names());
+      return this.name + " or " + (this.options._or.names());
     } else {
       return this.name;
     }
@@ -944,14 +944,14 @@ LineMatcher = (function() {
   };
 
   LineMatcher.prototype.match = function(line, check_or) {
-    var EXCLUDED, matched_properties, matches, _ref;
+    var EXCLUDED, matched_properties, matches, ref;
     if (check_or == null) {
       check_or = true;
     }
     matches = XRegExp.exec(line, this.rex);
     if (matches === null) {
       if (check_or) {
-        return ((_ref = this.options._or) != null ? typeof _ref.match === "function" ? _ref.match(line) : void 0 : void 0) || null;
+        return ((ref = this.options._or) != null ? typeof ref.match === "function" ? ref.match(line) : void 0 : void 0) || null;
       } else {
         return check_or;
       }
@@ -959,7 +959,7 @@ LineMatcher = (function() {
     EXCLUDED = ['index', 'input'];
     matched_properties = {};
     _.each(_.keys(matches), function(key) {
-      if (__indexOf.call(EXCLUDED, key) < 0 && isNaN(key)) {
+      if (indexOf.call(EXCLUDED, key) < 0 && isNaN(key)) {
         return matched_properties[key] = matches[key];
       }
     });
@@ -974,44 +974,44 @@ LineMatcher = (function() {
 
 
 // -- from: lib/AddressStrategy.coffee -- \\
-/*
-# This is the base class for all strategies
-#
-# TODO: get postal verification from the Universal Postal Union
-#
-# TODO: Address verification with eg Geocoder integration
-#
-# TODO: Make the Perl gods happy by outputting a big, evil regular expression
-#
-# TODO: Return an object that has multiple ambiguous addresses (i.e. matches
-# multiple destinations)
-*/
 
 /*
-#   AddressStrategy
-#   ---------------
-#
-# This class is intended to be subclassed.  The `do_parse_address` function
-# should take a series of lines and return a simple JSONable object that
-# adequately describes the components of the address.
-#
-# A given `subclass` should, after its definition, call subclass.register()
-*/
+ * This is the base class for all strategies
+ *
+ * TODO: get postal verification from the Universal Postal Union
+ *
+ * TODO: Address verification with eg Geocoder integration
+ *
+ * TODO: Make the Perl gods happy by outputting a big, evil regular expression
+ *
+ * TODO: Return an object that has multiple ambiguous addresses (i.e. matches
+ * multiple destinations)
+ */
 
+/*
+ *   AddressStrategy
+ *   ---------------
+ *
+ * This class is intended to be subclassed.  The `do_parse_address` function
+ * should take a series of lines and return a simple JSONable object that
+ * adequately describes the components of the address.
+ *
+ * A given `subclass` should, after its definition, call subclass.register()
+ */
 var AddressStrategy,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AddressStrategy = (function() {
   function AddressStrategy() {}
 
   AddressStrategy._registered_strategies = {};
 
+
   /*
    * Register this subclass as a strategy
    * Maps @name to the subclass calling register (@name is the canonical
    * iso3166 name)
-  */
-
+   */
 
   AddressStrategy.prototype.register = function() {
     var name;
@@ -1019,7 +1019,7 @@ AddressStrategy = (function() {
     if (!name) {
       throw new Error("Strategies require a `name`");
     }
-    if (__indexOf.call(AddressStrategy._registered_strategies, name) >= 0) {
+    if (indexOf.call(AddressStrategy._registered_strategies, name) >= 0) {
       throw new Error("Strategy " + name + " registered twice");
     }
     return AddressStrategy._registered_strategies[name] = this;
@@ -1051,41 +1051,43 @@ AddressStrategy = (function() {
   };
 
   AddressStrategy.prototype.run_line_strategies = function(strategies, addr_lines) {
-    var results,
-      _this = this;
+    var results;
     results = null;
-    _.any(strategies, function(strat, index) {
-      var err;
-      try {
-        results = _this.run_rex_line_strategy(strat, addr_lines);
-      } catch (_error) {
-        err = _error;
-        return false;
-      }
-      return results !== null;
-    });
+    _.any(strategies, (function(_this) {
+      return function(strat, index) {
+        var err, error;
+        try {
+          results = _this.run_rex_line_strategy(strat, addr_lines);
+        } catch (error) {
+          err = error;
+          return false;
+        }
+        return results !== null;
+      };
+    })(this));
     return results;
   };
 
   AddressStrategy.prototype.debug_line_strategies = function(strategies, addr_lines) {
-    var addr_str,
-      _this = this;
+    var addr_str;
     addr_str = _.map(addr_lines, function(line, idx) {
-      return "" + idx + ": " + line;
+      return idx + ": " + line;
     }).join("\n");
     console.log("\n** Debugging:\n" + addr_str);
-    return _.each(strategies, function(strat, index) {
-      var err, results;
-      if (strat.length !== addr_lines.length) {
-        return;
-      }
-      try {
-        return results = _this.run_rex_line_strategy(strat, addr_lines);
-      } catch (_error) {
-        err = _error;
-        return console.log("Rex failed: " + err);
-      }
-    });
+    return _.each(strategies, (function(_this) {
+      return function(strat, index) {
+        var err, error, results;
+        if (strat.length !== addr_lines.length) {
+          return;
+        }
+        try {
+          return results = _this.run_rex_line_strategy(strat, addr_lines);
+        } catch (error) {
+          err = error;
+          return console.log("Rex failed: " + err);
+        }
+      };
+    })(this));
   };
 
   AddressStrategy.prototype.parse_address = function(lines, address_string, debug) {
@@ -1113,7 +1115,7 @@ AddressStrategy = (function() {
 })();
 
 AddressStrategy.do_parse_address = function(addr_string, options) {
-  var country, country_key, last_line, lines, matches, strat, strategies, _i, _len, _ref;
+  var country, country_key, i, last_line, len, lines, matches, ref, strat, strategies;
   options = _.defaults(options, {
     defaultCountry: '',
     debug: false
@@ -1127,22 +1129,22 @@ AddressStrategy.do_parse_address = function(addr_string, options) {
     throw new Error("Addresses must be at least two lines long");
   }
   last_line = lines[lines.length - 1];
-  if (_ref = last_line.toLowerCase(), __indexOf.call(_.keys(COUNTRY_NAMES_MAP), _ref) >= 0) {
+  if (ref = last_line.toLowerCase(), indexOf.call(_.keys(COUNTRY_NAMES_MAP), ref) >= 0) {
     country = lines.pop().toLowerCase();
   } else if (options.defaultCountry) {
     country = options.defaultCountry;
   }
   if (country) {
     country_key = COUNTRY_NAMES_MAP[country.toLowerCase()];
-    if (__indexOf.call(_.keys(AddressStrategy._registered_strategies), country_key) >= 0) {
+    if (indexOf.call(_.keys(AddressStrategy._registered_strategies), country_key) >= 0) {
       strategies = [AddressStrategy._registered_strategies[country_key]];
     }
   }
   if (_.isEmpty(strategies)) {
     strategies = _.values(AddressStrategy._registered_strategies);
   }
-  for (_i = 0, _len = strategies.length; _i < _len; _i++) {
-    strat = strategies[_i];
+  for (i = 0, len = strategies.length; i < len; i++) {
+    strat = strategies[i];
     matches.push(strat.parse_address(lines, addr_string, options.debug));
   }
   return {
@@ -1152,33 +1154,32 @@ AddressStrategy.do_parse_address = function(addr_string, options) {
 
 
 // -- from: lib/CanadaStrategy.coffee -- \\
+
 /*
-#   CanadaStrategy
-#   --------------
-# A way to parse Canadian addresses
-#
-# Reference: 'Addressing Guidelines'
-# <http://www.canadapost.ca/tools/pg/manual/PGaddress-e.asp> 2012-11-01
-#
-*/
+ *   CanadaStrategy
+ *   --------------
+ * A way to parse Canadian addresses
+ *
+ * Reference: 'Addressing Guidelines'
+ * <http://www.canadapost.ca/tools/pg/manual/PGaddress-e.asp> 2012-11-01
+ *
+ */
+var CanadaStrategy,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
 
-var CanadaStrategy, _ref,
-  __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-CanadaStrategy = (function(_super) {
+CanadaStrategy = (function(superClass) {
   var ADDRESSEE, CARE_OF, MORE_ADDR_INFO, MUNICIPALITY, MUNICIPALITY_WITH_POSTAL, PLAIN_STREET, POSTAL, PO_BOX, STREET_UNIT, SUITE, UNIT_STREET, person_rex, provinces_list, street_rex, street_types, unit;
 
-  __extends(CanadaStrategy, _super);
+  extend(CanadaStrategy, superClass);
 
   function CanadaStrategy() {
-    _ref = CanadaStrategy.__super__.constructor.apply(this, arguments);
-    return _ref;
+    return CanadaStrategy.__super__.constructor.apply(this, arguments);
   }
 
   CanadaStrategy.prototype.name = 'canada';
 
-  provinces_list = ["AB", "Alberta", "BC", "British\\s+Columbia", "Manitoba", "MB", "New Brunswick", "NB", "Newfoundland\\s+and\\s+Labrador", "Newfoundland", "NF", "NL", "Newfoundland\\s+&\\s+Labrador", "Northwest Territories", "NT", "Nova Scotia", "NS", "Nunavut", "NU", "ON", "Ontario", "Prince\\s+Edward\\s+Island", "PE", "PEI", "Quebec", "QC", "Saskatchewan", "SK", "Yukon", "YT"];
+  provinces_list = ["AB", "Alberta", "BC", "British\\s+Columbia", "Manitoba", "MB", "New Brunswick", "NB", "Newfoundland\\s+and\\s+Labrador", "Newfoundland", "NF", "NL", "Newfoundland\\s+&\\s+Labrador", "Northwest Territories", "NT", "Nova Scotia", "NS", "Nunavut", "NU", "ON", "Ontario", "Prince\\s+Edward\\s+Island", "PE", "PEI", "Qu[eé]bec", "QC", "Saskatchewan", "SK", "Yukon", "YT"];
 
   street_types = ["Abbey", "ABBEY", "Acres", "ACRES", "Alley", "ALLEY", "Autoroute", "AUT", "Avenue", "AVE", "Avenue", "AV", "Bay", "BAY", "Beach", "BEACH", "Bend", "BEND", "Boulevard", "BLVD", "Boulevard", "BOUL", "building", "By-pass", "BYPASS", "Byway", "BYWAY", "Campus", "CAMPUS", "Cape", "CAPE", "CAR", "Carrefour", "CARREF", "Centre", "CTR", "Centre", "C", "Cercle", "CERCLE", "Chase", "CHASE", "Chemin", "CH", "Circle", "CIR", "Circuit", "CIRCT", "Close", "CLOSE", "Common", "COMMON", "Concession", "CONC", "Corners", "CRNRS", "Cour", "COUR", "Cours", "COURS", "Court", "CRT", "Cove", "COVE", "Crescent", "CRES", "Croissant", "CROIS", "Crossing", "CROSS", "Cul-de-sac", "CDS", "Dale", "DALE", "Dell", "DELL", "Diversion", "DIVERS", "Downs", "DOWNS", "Drive", "DR", "End", "END", "Esplanade", "ESPL", "Estates", "ESTATE", "Expressway", "EXPY", "Extension", "EXTEN", "Farm", "FARM", "Field", "FIELD", "Forest", "FOREST", "Freeway", "FWY", "Front", "FRONT", "Gardens", "GDNS", "Gate", "GATE", "Glade", "GLADE", "Glen", "GLEN", "Green", "GREEN", "Grounds", "GRNDS", "Grove", "GROVE", "Harbour", "HARBR", "Heath", "HEATH", "Heights", "HTS", "Highlands", "HGHLDS", "Highway", "HWY", "Hill", "HILL", "Hollow", "HOLLOW", "Impasse", "IMP", "Inlet", "INLET", "Island", "ISLAND", "Key", "KEY", "Knoll", "KNOLL", "Landing", "LANDNG", "Lane", "LANE", "Limits", "LMTS", "Line", "LINE", "Link", "LINK", "Lookout", "LKOUT", "Loop", "LOOP", "Mall", "MALL", "Manor", "MANOR", "Maze", "MAZE", "Meadow", "MEADOW", "Mews", "MEWS", "Moor", "MOOR", "Mount", "MOUNT", "Mountain", "MTN", "Orchard", "ORCH", "Parade", "PARADE", "Parc", "PARC", "Park", "PK", "Parkway", "PKY", "Passage", "PASS", "Path", "PATH", "Pathway", "PTWAY", "Pines", "PINES", "Place", "PL", "Place", "PLACE", "Plateau", "PLAT", "Plaza", "PLAZA", "Point", "PT", "Pointe", "POINTE", "Port", "PORT", "Private", "PVT", "Promenade", "PROM", "Quai", "QUAI", "Quay", "QUAY", "Ramp", "RAMP", "Rang", "RANG", "Range", "RG", "Ridge", "RIDGE", "Rise", "RISE", "Road", "RD", "Rond-point", "RDPT", "Route", "RTE", "Row", "ROW", "Rue", "RUE", "Ruelle", "RLE", "Run", "RUN", "Sentier", "SENT", "Square", "SQ", "Street", "ST", "Subdivision", "SUBDIV", "Terrace", "TERR", "Terrasse", "TSSE", "Thicket", "THICK", "Towers", "TOWERS", "Townline", "TLINE", "Trail", "TRAIL", "Turnabout", "TRNABT", "Vale", "VALE", "Via", "VIA", "View", "VIEW", "Village", "VILLGE", "Villas", "VILLAS", "Vista", "VISTA", "Voie", "VOIE", "Walk", "WALK", "Way", "WAY", "Wharf", "WHARF", "Wood", "WOOD", "Wynd", "WYND"];
 
@@ -1231,7 +1232,7 @@ CanadaStrategy = (function(_super) {
     invalid_tests: ["100 Wish Line, Unit #212", "Any street with no unit"]
   });
 
-  STREET_UNIT = new LineMatcher("Street - Unit", "" + street_rex + " \\s* [,\\-]? \\s* (?<suite> " + unit + ")", {
+  STREET_UNIT = new LineMatcher("Street - Unit", street_rex + " \\s* [,\\-]? \\s* (?<suite> " + unit + ")", {
     valid_tests: {
       "42 Wallaby Ave., Suite 1100A": {
         suite: "Suite 1100A",
@@ -1280,7 +1281,7 @@ CanadaStrategy = (function(_super) {
     invalid_tests: ['10 10']
   });
 
-  MUNICIPALITY = new LineMatcher("Municipality and Province", "(?<municipality> (?:\\p{L}|[\\-'\\s\\.])+?) \\s* ,? \\s*     (?<province> " + (provinces_list.join("|")) + ")", {
+  MUNICIPALITY = new LineMatcher("Municipality and Province", "(?<municipality> (?:\\p{L}|[\\-'\\s\\.])+?) \\s* ,? \\s* (?<province> " + (provinces_list.join("|")) + ")", {
     valid_tests: {
       "Bras-d'Or, NS": {
         municipality: "Bras-d'Or",
@@ -1310,7 +1311,7 @@ CanadaStrategy = (function(_super) {
     invalid_tests: ["HoH 0H0", "HoH 0ü0"]
   });
 
-  MUNICIPALITY_WITH_POSTAL = new LineMatcher("Municipality, province and postal code", "" + MUNICIPALITY.expression + " (?: \\s* ,? \\s* " + POSTAL.expression + ")?", {
+  MUNICIPALITY_WITH_POSTAL = new LineMatcher("Municipality, province and postal code", MUNICIPALITY.expression + " (?: \\s* ,? \\s* " + POSTAL.expression + ")?", {
     valid_tests: {
       "One, QC, M5R 1V2": {
         municipality: "One",
