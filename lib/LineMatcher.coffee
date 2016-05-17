@@ -22,7 +22,7 @@ class LineMatcher
       _or: null
     )
 
-    @rex = XRegExp("^#{expression}$", @options.rex_flags)
+    @rex = XRegExp("^#{@expression}$", @options.rex_flags)
 
   # return a list of names this could match
   names: () ->

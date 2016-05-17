@@ -77,7 +77,7 @@ FOOTER = """
 
 option '-g', '--grep [GREP]', 'pass "-g TEST" to Mocha'
 task 'test', 'Run tests in Mocha (via "npm test")', (options) ->
-  args = ["--compilers", "coffee:coffee-script", "-R", "spec"]
+  args = ["--require", "coffee-script/register", "--compilers", "coffee:coffee-script", "-R", "spec"]
   if options.grep
     args = args.concat(['-g'], options.grep)
   log "Cake is running: #{MOCHA_CMD} #{args.join(" ")}"
