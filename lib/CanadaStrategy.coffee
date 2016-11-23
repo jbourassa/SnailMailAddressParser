@@ -24,7 +24,7 @@ class CanadaStrategy extends AddressStrategy
     "Nunavut", "NU",
     "ON", "Ontario",
     "Prince\\s+Edward\\s+Island", "PE", "PEI",
-    "Qu[eé]bec", "QC",
+    "Qu[eé]bec", "QC", "PQ",
     "Saskatchewan", "SK",
     "Yukon", "YT",
   ]
